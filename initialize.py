@@ -20,6 +20,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 import constants as ct
 
+from chromadb.config import Settings
+
 
 ############################################################
 # 設定関連
@@ -131,11 +133,29 @@ def initialize_retriever():
     # チャンク分割を実施
     splitted_docs = text_splitter.split_documents(docs_all)
 
-    # ベクターストアの作成
-    db = Chroma.from_documents(splitted_docs, embedding=embeddings)
+    # # ベクターストアの作成
+    # db = Chroma.from_documents(splitted_docs, embedding=embeddings)
 
-    # ベクターストアを検索するRetrieverの作成
-    st.session_state.retriever = db.as_retriever(search_kwargs={"k": ct.DOCS_COUNT}) # 【問題1】【問題2】
+    # # ベクターストアを検索するRetrieverの作成
+    # st.session_state.retriever = db.as_retriever(search_kwargs={"k": ct.DOCS_COUNT}) # 【問題1】【問題2】
+    # ✅ ここでクライアント設定を追加
+
+    client_settings = Settings(
+        persist_directory="./chroma_db",  # Streamlit Cloudでも使える一時フォルダ
+        anonymized_telemetry=False
+    )
+
+    # ✅ 設定を渡して Chroma を作成
+    db = Chroma.from_documents(
+        splitted_docs,
+        embedding=embeddings,
+        client_settings=client_settings
+    )
+
+    st.session_state.retriever = db.as_retriever(search_kwargs={"k": ct.DOCS_COUNT})
+
+
+
 
 
 def initialize_session_state():
