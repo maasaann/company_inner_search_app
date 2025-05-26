@@ -27,7 +27,6 @@ import constants as ct
 # 「.env」ファイルで定義した環境変数の読み込み
 load_dotenv()
 
-openai_api_key = os.getenv("OPENAI_API_KEY")
 
 ############################################################
 # 関数定義
