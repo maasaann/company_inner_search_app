@@ -1,6 +1,8 @@
+import streamlit as st
+st.warning("具体的に入力したほうが期待通りの回答を得やすいです。")
 """
 このファイルは、Webアプリのメイン処理が記述されたファイルです。
-"""
+
 
 ############################################################
 # 1. ライブラリの読み込み
@@ -164,3 +166,4 @@ if chat_message:
     st.session_state.messages.append({"role": "user", "content": chat_message})
     # 表示用の会話ログにAIメッセージを追加
     st.session_state.messages.append({"role": "assistant", "content": content})
+"""
